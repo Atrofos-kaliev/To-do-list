@@ -13,14 +13,21 @@ function App() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteIndex, setDeleteIndex] = useState(null);
 
+  const [isInitialized, setIsInitialized] = useState(false);
+
   useEffect(() => {
-    const savedNotes = JSON.parse(localStorage.getItem('notes')) || [];
-    setNotes(savedNotes);
+    const storedNotes = localStorage.getItem('notes');
+    if (storedNotes) {
+      setNotes(JSON.parse(storedNotes));
+    }
+    setIsInitialized(true); 
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes));
-  }, [notes]);
+    if (isInitialized) {
+      localStorage.setItem('notes', JSON.stringify(notes));
+    }
+  }, [notes, isInitialized]);
 
   const resetForm = () => {
     setTitle('');
